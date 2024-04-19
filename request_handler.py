@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, get_all_employees, get_single_employee, get_all_customers, get_single_customer, create_location, create_employee, delete_animal
+from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, get_all_employees, get_single_employee, get_all_customers, get_single_customer, create_location, create_employee, delete_animal, delete_location
 import json
 
 # Here's a class. It inherits from another class.
@@ -140,7 +140,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         (resource, id) = self.parse_url(self.path)
         if resource == "animals":
             delete_animal(id)
-        
+        elif resource == "locations":
+            delete_location(id)
+            
         self.wfile.write("".encode())
 
 
