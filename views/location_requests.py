@@ -38,3 +38,15 @@ def get_single_location(id):
             requested_location = location
             
     return requested_location
+
+def delete_location(id):
+
+    location_index = -1
+
+    for index, location in enumerate(LOCATIONS):
+        if location["id"] == id:
+            
+            location_index = index
+
+    if location_index >= 0:
+        LOCATIONS.pop(location_index)

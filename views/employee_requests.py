@@ -26,3 +26,15 @@ def get_single_employee(id):
             requested_employee = employee
             
     return requested_employee
+
+def delete_employee(id):
+
+    location_index = -1
+
+    for index, employee in enumerate(EMPLOYEES):
+        if employee["id"] == id:
+            
+            employee_index = index
+
+    if employee_index >= 0:
+        EMPLOYEES.pop(employee_index)
