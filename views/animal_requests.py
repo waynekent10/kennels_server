@@ -79,4 +79,5 @@ def update_animal(id, new_animal):
         if animal["id"] == id:
             # Found the animal. Update the value.
             ANIMALS[index] = new_animal
+
             break
