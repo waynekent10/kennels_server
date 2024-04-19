@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, get_all_employees, get_single_employee, get_all_customers, get_single_customer, create_location, create_employee, delete_animal, delete_location, update_animal, update_location
+from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, get_all_employees, get_single_employee, get_all_customers, get_single_customer, create_location, create_employee, delete_animal, delete_location, update_animal, update_location, update_customer, update_employee
 import json
 
 # Here's a class. It inherits from another class.
@@ -142,6 +142,10 @@ class HandleRequests(BaseHTTPRequestHandler):
             update_animal(id, post_body)
         elif resource == "locations":
             update_location(id, post_body)
+        elif resource == "employees":
+            update_employee(id, post_body)
+        elif resource == "customers":
+            update_employee(id, post_body)
 
     # Encode the new animal and send in response
         self.wfile.write("".encode())
