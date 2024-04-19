@@ -27,3 +27,15 @@ def get_single_customer(id):
             requested_customer = customer
             
     return requested_customer
+
+def delete_customer(id):
+
+    location_index = -1
+
+    for index, customer in enumerate(CUSTOMERS):
+        if customer["id"] == id:
+            
+            customer_index = index
+
+    if customer_index >= 0:
+        CUSTOMERS.pop(customer_index)

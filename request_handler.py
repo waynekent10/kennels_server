@@ -142,6 +142,10 @@ class HandleRequests(BaseHTTPRequestHandler):
             delete_animal(id)
         elif resource == "locations":
             delete_location(id)
+        elif resource == "employees":
+            delete_location(id)
+        elif resource == "customers":
+            delete_location(id)
             
         self.wfile.write("".encode())
 
