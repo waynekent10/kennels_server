@@ -106,6 +106,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         new_animal = None
         new_location = None
         new_employee = None
+        new_customer = None
         
         if resource == "animals":
             new_animal = create_animal(post_body)
@@ -118,6 +119,10 @@ class HandleRequests(BaseHTTPRequestHandler):
         elif resource == "employees":
             new_employee = create_employee(post_body)
             response = new_employee
+            
+        elif resource == "customers":
+            new_customer = new_customer(post_body)
+            response = new_customer
         else:
             self._set_headers(400)
             response = {"error": "Invalid resource"}
@@ -140,12 +145,15 @@ class HandleRequests(BaseHTTPRequestHandler):
     # Delete a single animal from the list
         if resource == "animals":
             update_animal(id, post_body)
+
         elif resource == "locations":
             update_location(id, post_body)
+            
         elif resource == "employees":
             update_employee(id, post_body)
+            
         elif resource == "customers":
-            update_employee(id, post_body)
+            update_customer(id, post_body)
 
     # Encode the new animal and send in response
         self.wfile.write("".encode())
