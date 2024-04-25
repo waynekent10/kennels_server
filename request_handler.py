@@ -145,7 +145,7 @@ class HandleRequests(BaseHTTPRequestHandler):
     # Delete a single animal from the list
         if resource == "animals":
             update_animal(id, post_body)
-
+            
         elif resource == "locations":
             update_location(id, post_body)
             
