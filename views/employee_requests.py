@@ -2,12 +2,8 @@ import sqlite3
 import json
 from models import Employee
 
-EMPLOYEES = [
-    {
-        "id": 1,
-        "name": "Jenna Solis"
-    }
-]
+EMPLOYEES = [] 
+
 def get_all_employees():
     # Open a connection to the database
     with sqlite3.connect("./kennel.sqlite3") as conn:
@@ -21,6 +17,8 @@ def get_all_employees():
         SELECT
             a.id,
             a.name
+            a.address
+            a.location_id
         FROM employee a
         """)
 
@@ -65,6 +63,8 @@ def get_single_employee(id):
         SELECT
             a.id,
             a.name
+            a.address
+            a.location_id
         FROM employee a
         WHERE a.id = ?
         """, ( id, ))
@@ -73,7 +73,7 @@ def get_single_employee(id):
         data = db_cursor.fetchone()
 
         # Create an animal instance from the current row
-        employee = Employee(data['id'], data['name'])
+        employee = Employee(data['id'], data['name'], data('address'), data('location_id'))
 
         return employee.__dict__
 
@@ -96,3 +96,30 @@ def update_employee(id, new_employee):
 
             EMPLOYEES[index] = new_employee
             break
+# TODO: you will get an error about the address on customer. Look through the customer model and requests to see if you can solve the issue.
+        
+def get_employees_by_location(location_id):
+
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute("""
+        select
+            a.id,
+            a.name,
+            a.address,
+            a.location_id
+        from Employee a
+        WHERE c.email = ?
+        """, ( location_id, ))
+
+        employees = []
+        dataset = db_cursor.fetchall()
+
+        for row in dataset:
+            employee = Employee(row['id'], row['name'], row['address'], row['email'] , row['password'])
+            employees.append(employee.__dict__)
+
+    return employee
