@@ -21,7 +21,10 @@ def get_all_customers():
         db_cursor.execute("""
         SELECT
             a.id,
-            a.name
+            a.name,
+            a.address,
+            a.email,
+            a.password
         FROM customer a
         """)
 
@@ -38,7 +41,7 @@ def get_all_customers():
             # Note that the database fields are specified in
             # exact order of the parameters defined in the
             # Animal class above.
-            customer = Customer(row['id'], row['name'])
+            customer = Customer(row['id'], row['name'], row['address'], row['email'] , row['password'])
 
             customers.append(customer.__dict__) # see the notes below for an explanation on this line of code.
 
