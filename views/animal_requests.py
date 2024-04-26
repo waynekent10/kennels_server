@@ -2,32 +2,8 @@ import sqlite3
 import json
 from models import Animal
 
-ANIMALS = [
-    {
-        "id": 1,
-        "name": "Snickers",
-        "species": "Dog",
-        "locationId": 1,
-        "customerId": 4,
-        "status": "Admitted"
-    },
-    {
-        "id": 2,
-        "name": "Roman",
-        "species": "Dog",
-        "locationId": 1,
-        "customerId": 2,
-        "status": "Admitted"
-    },
-    {
-        "id": 3,
-        "name": "Blue",
-        "species": "Cat",
-        "locationId": 2,
-        "customerId": 1,
-        "status": "Admitted"
-    }
-]
+ANIMALS = []
+
 def get_all_animals():
     # Open a connection to the database
     with sqlite3.connect("./kennel.sqlite3") as conn:
@@ -96,7 +72,7 @@ def get_single_animal(id):
         SELECT
             a.id,
             a.name,
-            a.breed,
+            a.species,
             a.status,
             a.location_id,
             a.customer_id
@@ -108,7 +84,7 @@ def get_single_animal(id):
         data = db_cursor.fetchone()
 
         # Create an animal instance from the current row
-        animal = Animal(data['id'], data['name'], data['breed'],
+        animal = Animal(data['id'], data['name'], data['species'],
                             data['status'], data['location_id'],
                             data['customer_id'])
 
@@ -123,16 +99,34 @@ def delete_animal(id):
         WHERE id = ?
         """, (id, ))
 
-
 def update_animal(id, new_animal):
-    # Iterate the ANIMALS list, but use enumerate() so that
-    # you can access the index value of each item.
-    for index, animal in enumerate(ANIMALS):
-        if animal["id"] == id:
-            # Found the animal. Update the value.
-            ANIMALS[index] = new_animal
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        db_cursor = conn.cursor()
 
-            break
+        db_cursor.execute("""
+        UPDATE Animal
+            SET
+                name = ?,
+                species = ?,
+                status = ?,
+                location_id = ?,
+                customer_id = ?
+        WHERE id = ?
+        """, (new_animal['name'], new_animal['species'],
+              new_animal['status'], new_animal['locationId'],
+              new_animal['customerId'], id, ))
+
+        # Were any rows affected?
+        # Did the client send an `id` that exists?
+        rows_affected = db_cursor.rowcount
+
+    # return value of this function
+    if rows_affected == 0:
+        # Forces 404 response by main module
+        return False
+    else:
+        # Forces 204 response by main module
+        return True
 # TODO: you will get an error about the address on customer. Look through the customer model and requests to see if you can solve the issue.
         
 def get_animals_by_status(status):
@@ -145,7 +139,7 @@ def get_animals_by_status(status):
         SELECT
             c.id,
             c.name,
-            c.breed,
+            c.species,
             c.status,
             c.location_id,
             c.customer_id
@@ -157,7 +151,7 @@ def get_animals_by_status(status):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row['id'], row['name'], row['breed'],
+            animal = Animal(row['id'], row['name'], row['species'],
                             row['status'], row['location_id'],
                             row['customer_id'])
             animals.append(animal.__dict__)
@@ -175,7 +169,7 @@ def get_animals_by_location(location_id):
         SELECT
             c.id,
             c.name,
-            c.breed,
+            c.species,
             c.status,
             c.location_id,
             c.customer_id
@@ -187,7 +181,7 @@ def get_animals_by_location(location_id):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row['id'], row['name'], row['breed'],
+            animal = Animal(row['id'], row['name'], row['species'],
                             row['status'], row['location_id'],
                             row['customer_id'])
             animals.append(animal.__dict__)
