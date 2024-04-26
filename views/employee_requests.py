@@ -16,8 +16,8 @@ def get_all_employees():
         db_cursor.execute("""
         SELECT
             a.id,
-            a.name
-            a.address
+            a.name,
+            a.address,
             a.location_id
         FROM employee a
         """)
@@ -35,11 +35,11 @@ def get_all_employees():
             # Note that the database fields are specified in
             # exact order of the parameters defined in the
             # Animal class above.
-            employee = EMPLOYEES(row['id'], row['name'] )
+            employee = Employee(row['id'], row['name'], row['address'], row['location_id'] )
 
             employees.append(employee.__dict__) # see the notes below for an explanation on this line of code.
 
-    return employee
+    return employees
 
 def create_employee(employee):
     max_id = EMPLOYEES[-1]["id"]
@@ -62,8 +62,8 @@ def get_single_employee(id):
         db_cursor.execute("""
         SELECT
             a.id,
-            a.name
-            a.address
+            a.name,
+            a.address,
             a.location_id
         FROM employee a
         WHERE a.id = ?
@@ -73,21 +73,19 @@ def get_single_employee(id):
         data = db_cursor.fetchone()
 
         # Create an animal instance from the current row
-        employee = Employee(data['id'], data['name'], data('address'), data('location_id'))
+        employee = Employee(data['id'], data['name'], data['address'], data['location_id'])
+
 
         return employee.__dict__
 
 def delete_employee(id):
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        db_cursor = conn.cursor()
 
-    location_index = -1
-
-    for index, employee in enumerate(EMPLOYEES):
-        if employee["id"] == id:
-            
-            employee_index = index
-
-    if employee_index >= 0:
-        EMPLOYEES.pop(employee_index)
+        db_cursor.execute("""
+        DELETE FROM employee
+        WHERE id = ?
+        """, (id, ))
 
 def update_employee(id, new_employee):
 
