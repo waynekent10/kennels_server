@@ -74,19 +74,16 @@ WHERE a.id = 3
 SELECT
     a.id,
     a.name,
-    a.address
-FROM location a
-WHERE a.id = 2
-
--- Get only the employee rows where the `id` field value is 3
-SELECT
-    e.id,
-    e.name
-FROM employee e
-WHERE e.id = 3
-
-SELECT
-    c.id,
-    c.name
-FROM customer c
-WHERE c.id = 2
+    a.breed,
+    a.status,
+    a.location_id,
+    a.customer_id,
+    l.name location_name,
+    l.address location_address
+    c.name customer_name
+    c.address customer_address
+FROM Animal a
+JOIN Location l
+    ON l.id = a.location_id
+JOIN Customer c
+    ON c.id = a.customer_id
